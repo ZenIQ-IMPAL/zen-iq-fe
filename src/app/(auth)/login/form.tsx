@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { Button } from "@/components/button";
+import { Button } from "@/components/ui/button";
 import { type LoginState, loginAction } from "./action";
 
 function SubmitButton() {
