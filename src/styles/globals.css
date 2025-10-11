@@ -1,25 +1,66 @@
 @import "tailwindcss";
 @import "./colors.css";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+    /* ZenIQ Custom Colors */
+    --color-primary: var(--primary); /* #3E6AE1 */
+    --color-white-zen-10: var(--white-zen-10);
+    --color-gray-zen-10: var(--gray-zen-10);
+    --color-gray-zen-82: var(--gray-zen-82);
+    --color-gray-zen-bdbd: var(--gray-zen-bdbd);
+    --color-dark-blue-zen-ia2: var(--dark-blue-zen-ia2);
+    
+    /* Shadcn Colors */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-primary-oklch: var(--primary-oklch);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    
+    /* Sidebar */
+    --color-sidebar-background: var(--sidebar-background);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+    
+    /* Radius */
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: var(--font-poppins), sans-serif;
+    }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-poppins), sans-serif;
+.custom-container {
+    @apply px-4 md:px-12 xl:px-56;
 }
