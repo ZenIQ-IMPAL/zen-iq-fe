@@ -33,7 +33,7 @@ export default function CourseDetail() {
   return (
     <>
       <Navbar />
-      <div className="custom-container max-w-7xl mx-auto mt-[99px] mb-[99px]">
+      <div className="custom-container mx-auto mt-[99px] mb-[99px]">
         <HeaderSection />
         <div className="flex flex-col lg:flex-row gap-8">
           <VideoSection />
