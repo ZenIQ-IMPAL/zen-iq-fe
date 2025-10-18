@@ -44,7 +44,7 @@ export default function CourseDetail() {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="custom-container max-w-7xl mx-auto mt-[99px] mb-[99px]">
         <h1 className="text-3xl font-bold mb-6">
           AWS Certified Solutions Architect
         </h1>
@@ -63,7 +63,7 @@ export default function CourseDetail() {
 
           {/* Course Content */}
           <div className="w-full lg:w-1/3">
-            <div className="divide-y divide-[#F5F5F5] w-[387px] rounded-md border border-[#F5F5F5] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.05)] bg-white overflow-hidden">
+            <div className="divide-y divide-[#F5F5F5]  w-full max-w-[387px] rounded-md border border-[#F5F5F5] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.05)] bg-white overflow-hidden">
               {/* Header inside the box */}
               <div className="bg-white px-4 py-3">
                 <h2 className="text-xl font-semibold text-gray-900">
