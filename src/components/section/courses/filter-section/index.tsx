@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import styles from "./styles.module.css";
 
 interface FilterSectionProps {
   filter: string;
@@ -16,42 +17,16 @@ interface FilterSectionProps {
 
 export function FilterSection({ filter, setFilter }: FilterSectionProps) {
   return (
-    <div className="flex flex-col md:flex-row gap-4 justify-between mb-8 mt-[100px]">
+    <div className={styles.container}>
       <Input
         type="text"
         placeholder="Find your favorite course"
-        className="
-          w-full
-          sm:w-[280px]
-          md:w-[319px]
-          h-[50px]
-          border border-[#4F4F4F]
-          rounded-[10px]
-          placeholder:text-[#828282]
-          focus:outline-none focus:ring-2 focus:ring-primary
-          transition
-        "
+        className={styles.input}
       />
 
       <Select value={filter} onValueChange={setFilter}>
-        <SelectTrigger
-          className="
-            w-full
-            sm:w-[180px]
-            md:w-[212px]
-            h-[50px]
-            min-h-[50px]
-            border border-[#4F4F4F]
-            rounded-[10px]
-            px-4
-            placeholder:text-[#828282]
-            focus:outline-none focus:ring-2 focus:ring-primary
-            transition
-            opacity-100
-            transform-none
-          "
-        >
-          <SelectValue placeholder="Select filter" />
+        <SelectTrigger className={styles.selectTrigger}>
+          <SelectValue placeholder="Select filter" className={styles.selectValuePlaceholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="New Courses">New Courses</SelectItem>
