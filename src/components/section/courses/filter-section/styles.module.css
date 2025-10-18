@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* gap-4 = 1rem */
+  justify-content: space-between;
+  margin-bottom: 2rem; /* mb-8 = 2rem */
+  margin-top: 100px; /* mt-[100px] */
+}
+
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row;
+  }
+}
+
+.input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #4F4F4F;
+  border-radius: 10px;
+  padding-left: 0.75rem; /* optional for input padding */
+  padding-right: 0.75rem;
+  transition: all 0.3s ease;
+  color: inherit;
+}
+
+.input::placeholder {
+  color: #828282;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary, #3b82f6); /* Replace with your primary color */
+}
+
+@media (min-width: 640px) {
+  /* sm:w-[280px] */
+  .input {
+    width: 280px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* md:w-[319px] */
+  .input {
+    width: 319px;
+  }
+}
+
+.selectTrigger {
+  width: 100%;
+  height: 50px;
+  min-height: 50px;
+  border: 1px solid #4F4F4F;
+  border-radius: 10px;
+  padding-left: 1rem; /* px-4 */
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+}
+
+.selectTrigger:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary, #3b82f6);
+}
+
+@media (min-width: 640px) {
+  /* sm:w-[180px] */
+  .selectTrigger {
+    width: 180px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* md:w-[212px] */
+  .selectTrigger {
+    width: 212px;
+  }
+}
+
+.selectValuePlaceholder {
+  color: #828282;
+}
