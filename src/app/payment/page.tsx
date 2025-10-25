@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { Navbar } from "@/components/navbar";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -56,39 +57,8 @@ export default function PaymentPage() {
     const currentPlan = planDetails[selectedPlan as keyof typeof planDetails] || planDetails["6months"];
     return (
         <div className="min-h-screen bg-white">
-            {/* Header */}
-            <nav className="flex items-center justify-between p-4 custom-container sticky top-0 bg-white shadow-sm z-50">
-                <Link href="/">
-                    <Image
-                        src="/images/img-logo-dark.png"
-                        alt="ZenIQ Logo"
-                        width={1920}
-                        height={1080}
-                        className="h-9 w-20"
-                    />
-                </Link>
-
-                <div className="hidden lg:flex items-center space-x-8">
-                    <Link href="/courses" className="text-gray-700 hover:text-primary transition-colors">
-                        Courses
-                    </Link>
-                    <Link href="#pricing" className="text-gray-700 hover:text-primary transition-colors">
-                        Pricing
-                    </Link>
-                    <Link href="#about-us" className="text-gray-700 hover:text-primary transition-colors">
-                        About Us
-                    </Link>
-                    <Link href="#success-story" className="text-gray-700 hover:text-primary transition-colors">
-                        Success Story
-                    </Link>
-                </div>
-
-                <div className="hidden lg:block">
-                    <Link href="/login">
-                        <Button className="bg-primary">Login</Button>
-                    </Link>
-                </div>
-            </nav>
+            {/* Navbar */}
+            <Navbar />
 
             {/* Payment Banner */}
             <div className="bg-primary py-12">
@@ -176,88 +146,17 @@ export default function PaymentPage() {
                         </div>
 
                         {/* Complete Payment Button */}
-                        <Button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3">
-                            Complete Payment
-                        </Button>
+                        <Link href="/payment/success">
+                            <Button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3">
+                                Complete Payment
+                            </Button>
+                        </Link>
                     </div>
                 </div>
             </div>
 
-            {/* Compact Footer */}
-            <footer className="bg-dark-blue-zen-ia2 w-full">
-                <div className="custom-container py-6">
-                    <div className="flex flex-col items-center text-center space-y-4">
-                        {/* Logo */}
-                        <div>
-                            <Image
-                                src="/images/img-logo-light.png"
-                                alt="ZenIQ Logo"
-                                width={120}
-                                height={45}
-                                className="h-10 w-auto"
-                            />
-                        </div>
-
-                        {/* Newsletter Section - Compact */}
-                        <div className="w-full max-w-lg space-y-3">
-                            <h4 className="text-white font-semibold text-lg">
-                                Subscribe to get a newsletter
-                            </h4>
-
-                            {/* Email Subscription Form */}
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 w-full max-w-sm mx-auto">
-                                <Input
-                                    type="email"
-                                    placeholder="Your email"
-                                    className="w-full sm:flex-1 bg-dark-blue-zen-ia2 border-white/30 text-white placeholder:text-white/60 rounded-full px-4 py-3 focus:border-primary focus:ring-primary"
-                                />
-                                <Button
-                                    type="button"
-                                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300"
-                                >
-                                    Subscribe
-                                </Button>
-                            </div>
-                        </div>
-
-                        {/* Footer Navigation Links */}
-                        <nav className="pt-2">
-                            <ul className="flex flex-wrap items-center justify-center gap-3 md:gap-4 text-white/80">
-                                {[
-                                    { href: "/courses", label: "Courses" },
-                                    { href: "/payment", label: "Payment" },
-                                    { href: "/success-story", label: "Success Story" },
-                                    { href: "/about", label: "About Us" },
-                                ].map((link, index) => (
-                                    <li
-                                        key={link.href}
-                                        className="flex items-center"
-                                    >
-                                        <Link
-                                            href={link.href}
-                                            className="hover:text-white transition-colors duration-200 text-sm"
-                                        >
-                                            {link.label}
-                                        </Link>
-                                        {index < 3 && (
-                                            <span className="ml-3 md:ml-4 text-white/40">
-                                                |
-                                            </span>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
-
-                        {/* Copyright */}
-                        <div className="pt-3 border-t border-white/10 w-full">
-                            <p className="text-white/70 text-sm">
-                                ©{new Date().getFullYear()} ZenIQ Education
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            {/* Footer */}
+            <Footer />
         </div>
     );
 }
