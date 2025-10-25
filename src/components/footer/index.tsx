@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 
 const footerLinks = [
     { href: "/courses", label: "Courses" },
+    { href: "/payment", label: "Payment" },
     { href: "/success-story", label: "Success Story" },
     { href: "/about", label: "About Us" },
 ];

@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
 
 interface PricingPlan {
     id: number;
@@ -15,6 +16,22 @@ interface PricingCardProps {
 }
 
 export const PricingCard = ({ plan }: PricingCardProps) => {
+    // Map plan names to URL parameters
+    const getPlanParam = (planName: string) => {
+        switch (planName) {
+            case "Monthly Plan":
+                return "monthly";
+            case "6-Month Plan":
+                return "6months";
+            case "12-Month Plan":
+                return "12months";
+            default:
+                return "6months";
+        }
+    };
+
+    const planParam = getPlanParam(plan.name);
+
     return (
         <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 py-0">
             <CardContent className="p-0">
@@ -42,12 +59,14 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
                             </div>
                         ))}
                     </div>
-                    <Button
-                        variant="outline"
-                        className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-5 text-base"
-                    >
-                        Get started
-                    </Button>
+                    <Link href={`/payment?plan=${planParam}`}>
+                        <Button
+                            variant="outline"
+                            className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-5 text-base"
+                        >
+                            Get started
+                        </Button>
+                    </Link>
                 </div>
             </CardContent>
         </Card>
