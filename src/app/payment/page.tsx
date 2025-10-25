@@ -8,7 +8,7 @@ import { Check } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 const planDetails = {
     monthly: {
@@ -43,7 +43,7 @@ const planDetails = {
     }
 };
 
-export default function PaymentPage() {
+function PaymentContent() {
     const searchParams = useSearchParams();
     const [selectedPlan, setSelectedPlan] = useState("6months");
 
@@ -158,5 +158,20 @@ export default function PaymentPage() {
             {/* Footer */}
             <Footer />
         </div>
+    );
+}
+
+export default function PaymentPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-white flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading payment page...</p>
+                </div>
+            </div>
+        }>
+            <PaymentContent />
+        </Suspense>
     );
 }
