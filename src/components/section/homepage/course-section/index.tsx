@@ -8,7 +8,7 @@ interface Instructor {
 }
 
 interface Course {
-    id: number;
+    id: string;
     title: string;
     description: string;
     image: string;
@@ -23,7 +23,7 @@ interface CourseSectionProps {
 
 const freeCourses: Course[] = [
     {
-        id: 1,
+        id: "1",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -34,7 +34,7 @@ const freeCourses: Course[] = [
         },
     },
     {
-        id: 2,
+        id: "2",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -45,7 +45,7 @@ const freeCourses: Course[] = [
         },
     },
     {
-        id: 3,
+        id: "3",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -56,7 +56,7 @@ const freeCourses: Course[] = [
         },
     },
     {
-        id: 4,
+        id: "4",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -70,7 +70,7 @@ const freeCourses: Course[] = [
 
 const popularCourses: Course[] = [
     {
-        id: 1,
+        id: "1",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -81,7 +81,7 @@ const popularCourses: Course[] = [
         },
     },
     {
-        id: 2,
+        id: "2",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -92,7 +92,7 @@ const popularCourses: Course[] = [
         },
     },
     {
-        id: 3,
+        id: "3",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
@@ -103,7 +103,7 @@ const popularCourses: Course[] = [
         },
     },
     {
-        id: 4,
+        id: "4",
         title: "AWS Certified solutions Architect",
         description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
