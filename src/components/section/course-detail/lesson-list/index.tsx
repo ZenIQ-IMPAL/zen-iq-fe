@@ -22,6 +22,10 @@ export function LessonsList({ lessons }: LessonsListProps) {
     );
   };
 
+  if (!lessons || lessons.length === 0) {
+    return <></>;
+  }
+
   return (
     <div className="divide-y divide-[#F5F5F5] w-full max-w-[387px] rounded-md border border-[#F5F5F5] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.05)] bg-white overflow-hidden">
       {/* Header inside the box */}
