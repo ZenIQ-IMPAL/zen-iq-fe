@@ -1,7 +1,7 @@
 import { CourseCard } from "@/components/course-card";
 
 interface Course {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image: string;
