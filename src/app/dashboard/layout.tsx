@@ -2,12 +2,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { name: "My Course", href: "/dashboard/my-course" },
@@ -44,11 +49,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Top Section */}
         <div>
           {/* Close button mobile */}
-          <div className="md:hidden flex justify-end p-4">
-            <button onClick={() => setOpen(false)} className="text-xl">
-              ✕
-            </button>
-          </div>
+          {mounted && (
+            <div className="md:hidden flex justify-end p-4">
+              <button onClick={() => setOpen(false)}>✕</button>
+            </div>
+          )}
 
           {/* Logo */}
           <div className="h-20 flex items-center justify-center">
