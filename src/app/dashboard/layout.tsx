@@ -2,11 +2,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
     { name: "My Course", href: "/dashboard/my-course" },
@@ -14,21 +20,41 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   ];
 
   const handleLogout = () => {
-    console.log("User logged out");
     router.push("/");
   };
 
   return (
     <div className="flex min-h-screen">
+      {/* Mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 w-full h-16 flex items-center px-4 shadow bg-white z-20">
+        <button onClick={() => setOpen(true)}>
+          <span className="text-2xl">☰</span>
+        </button>
+        <span className="ml-4 font-semibold text-lg">Dashboard</span>
+      </div>
+
       {/* Sidebar */}
       <aside
-        className="w-64 flex flex-col justify-between border-r fixed left-0 top-0 h-full z-10"
+        className={`
+    fixed top-0 left-0 h-full z-30 w-64 
+    flex flex-col border-r 
+    transition-transform duration-300
+    ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+  `}
         style={{
           backgroundColor: "var(--color-sidebar-background)",
           borderColor: "var(--color-sidebar-border)",
         }}
       >
+        {/* Top Section */}
         <div>
+          {/* Close button mobile */}
+          {mounted && (
+            <div className="md:hidden flex justify-end p-4">
+              <button onClick={() => setOpen(false)}>✕</button>
+            </div>
+          )}
+
           {/* Logo */}
           <div className="h-20 flex items-center justify-center">
             <Link href="/" className="flex items-center space-x-2">
@@ -37,7 +63,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 alt="ZenIQ Logo"
                 width={100}
                 height={50}
-                className="cursor-pointer"
               />
             </Link>
           </div>
@@ -55,6 +80,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                       ? "bg-[var(--color-sidebar-accent)] text-[var(--primary)] font-semibold"
                       : "text-[var(--color-sidebar-foreground)] hover:bg-[var(--color-sidebar-accent)]"
                   }`}
+                  onClick={() => setOpen(false)}
                 >
                   {item.name}
                 </Link>
@@ -63,18 +89,28 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </nav>
         </div>
 
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="bg-[var(--error)] text-white py-3 text-sm font-semibold hover:opacity-90 transition"
-        >
-          Logout
-        </button>
+        {/* Bottom Section */}
+        <div className="mt-auto">
+          <button
+            onClick={handleLogout}
+            className="w-full bg-[var(--error)] text-white py-3 text-sm font-semibold hover:opacity-90 transition"
+          >
+            Logout
+          </button>
+        </div>
       </aside>
+
+      {/* Overlay mobile */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/40 md:hidden z-20"
+        />
+      )}
 
       {/* Main Content */}
       <main
-        className="flex-1 overflow-y-auto ml-64"
+        className="flex-1 overflow-y-auto md:ml-64 pt-16 md:pt-0"
         style={{ backgroundColor: "var(--color-gray-zen-10)" }}
       >
         {children}
