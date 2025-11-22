@@ -1,39 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronRight, ChevronLeft, Star } from "lucide-react";
-
-const testimonials = [
-    {
-        id: 1,
-        name: "Gloria Rose",
-        rating: 4,
-        text: "ZenIQ completely changed the way I learn online. The courses are comprehensive, the platform is easy to use, the community is supportive, and the overall experience really helped me grow faster and achieve my goals.",
-    },
-    {
-        id: 2,
-        name: "Michael Chen",
-        rating: 5,
-        text: "The best investment I've made in my career. The instructors are knowledgeable, the content is up-to-date, and the interactive learning approach makes complex topics easy to understand.",
-    },
-    {
-        id: 3,
-        name: "Sarah Johnson",
-        rating: 5,
-        text: "I've tried many online learning platforms, but ZenIQ stands out. The personalized learning paths and real-world projects helped me land my dream job in just 6 months!",
-    },
-    {
-        id: 4,
-        name: "David Kumar",
-        rating: 5,
-        text: "Amazing platform with incredible support. The community is active and helpful, and the course material is structured perfectly for both beginners and advanced learners.",
-    },
-];
+import {
+    getFeaturedTestimonials,
+    type Testimonial,
+} from "@/lib/api/testimonials";
 
 export const SuccessStorySection = () => {
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            const data = await getFeaturedTestimonials();
+            setTestimonials(data);
+            setIsLoading(false);
+        };
+
+        fetchTestimonials();
+    }, []);
 
     const nextTestimonial = () => {
         setDirection("next");
@@ -48,6 +37,40 @@ export const SuccessStorySection = () => {
     };
 
     const currentTestimonial = testimonials[currentIndex];
+
+    if (isLoading) {
+        return (
+            <section
+                className="w-full bg-gray-50 py-16 custom-container"
+                id="success-story"
+            >
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                    <div className="space-y-6">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="h-px w-12 sm:w-16 bg-gray-300"></div>
+                                <span className="text-sm sm:text-base text-gray-500 uppercase tracking-wider font-medium">
+                                    Success Story
+                                </span>
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                                What They Say?
+                            </h2>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-center min-h-[300px]">
+                        <div className="text-gray-500">
+                            Loading testimonials...
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    if (testimonials.length === 0) {
+        return null;
+    }
 
     return (
         <section
@@ -90,13 +113,14 @@ export const SuccessStorySection = () => {
                         <CardContent className="p-6 sm:p-8">
                             <div className="space-y-6">
                                 <p className="text-base sm:text-lg text-gray-600 leading-relaxed italic min-h-[120px] sm:min-h-[140px]">
-                                    "{currentTestimonial.text}"
+                                    "{currentTestimonial.testimonial_text}"
                                 </p>
 
                                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                                     <div>
                                         <p className="font-semibold text-gray-900 text-lg">
-                                            {currentTestimonial.name}
+                                            {currentTestimonial.user
+                                                ?.full_name || "Anonymous"}
                                         </p>
                                     </div>
 
