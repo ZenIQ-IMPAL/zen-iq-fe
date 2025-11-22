@@ -10,9 +10,19 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 
 // Schema untuk Register
 export const registerSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  fullName: z
+    .string()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name must be at most 100 characters")
+    .regex(/^[a-zA-Z\s]+$/, "Full name can only contain letters and spaces"),
   email: z.string().email("Invalid email format"),
-  password: z.string().min(8, "Password must be at least 8 characters long and include at least one symbol and one uppercase letter")
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      "Password must contain lowercase, uppercase, and numbers"
+    ),
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
