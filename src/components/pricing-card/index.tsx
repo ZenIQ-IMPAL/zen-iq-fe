@@ -4,10 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
 interface PricingPlan {
-    id: number;
+    id: string;
     name: string;
     price: number;
-    period: string;
+    durationMonths: number;
     features: string[];
 }
 
@@ -16,21 +16,27 @@ interface PricingCardProps {
 }
 
 export const PricingCard = ({ plan }: PricingCardProps) => {
-    // Map plan names to URL parameters
-    const getPlanParam = (planName: string) => {
-        switch (planName) {
-            case "Monthly Plan":
-                return "monthly";
-            case "6-Month Plan":
-                return "6months";
-            case "12-Month Plan":
-                return "12months";
-            default:
-                return "6months";
-        }
+    const getPlanParam = (durationMonths: number) => {
+        const monthMap: Record<number, string> = {
+            1: "monthly",
+            6: "6months",
+            12: "12months",
+        };
+        return monthMap[durationMonths] || "6months";
     };
 
-    const planParam = getPlanParam(plan.name);
+    const formatRupiah = (price: number): string => {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(price);
+    };
+
+    const planParam = getPlanParam(plan.durationMonths);
+    const period =
+        plan.durationMonths === 1 ? "/month" : `/${plan.durationMonths} months`;
 
     return (
         <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300 py-0">
@@ -40,11 +46,11 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
                         {plan.name}
                     </h3>
                     <div className="flex items-baseline justify-center">
-                        <span className="text-4xl sm:text-5xl font-bold text-gray-900">
-                            ${plan.price}
+                        <span className="text-3xl sm:text-4xl font-bold text-gray-900">
+                            {formatRupiah(plan.price)}
                         </span>
-                        <span className="text-xl sm:text-2xl text-gray-500 ml-2">
-                            {plan.period}
+                        <span className="text-lg sm:text-xl text-gray-500 ml-2">
+                            {period}
                         </span>
                     </div>
                 </div>

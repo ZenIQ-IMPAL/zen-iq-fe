@@ -1,121 +1,28 @@
 "use client";
+
+import { useState, useEffect } from "react";
 import { CourseCard } from "@/components/course-card";
+import { CourseCardSkeleton } from "@/components/course-card/skeleton";
 import { Button } from "@/components/ui/button";
-
-interface Instructor {
-    name: string;
-    avatar: string;
-}
-
-interface Course {
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-    instructor: Instructor;
-}
+import {
+    getFreeCourses,
+    getPopularCourses,
+    type Course,
+} from "@/lib/api/courses";
 
 interface CourseSectionProps {
     title: string;
     courses: Course[];
+    isLoading: boolean;
     onSeeAll: () => void;
 }
 
-const freeCourses: Course[] = [
-    {
-        id: "1",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "2",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "3",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "4",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-];
-
-const popularCourses: Course[] = [
-    {
-        id: "1",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "2",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "3",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-    {
-        id: "4",
-        title: "AWS Certified solutions Architect",
-        description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-        image: "/images/img-courses.png",
-        instructor: {
-            name: "Lina",
-            avatar: "/api/placeholder/40/40",
-        },
-    },
-];
-
-const CourseSection = ({ title, courses, onSeeAll }: CourseSectionProps) => {
+const CourseSection = ({
+    title,
+    courses,
+    isLoading,
+    onSeeAll,
+}: CourseSectionProps) => {
     return (
         <div className="mb-12 sm:mb-16">
             <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -131,21 +38,72 @@ const CourseSection = ({ title, courses, onSeeAll }: CourseSectionProps) => {
                 </Button>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-                {courses.slice(0, 3).map((course) => (
-                    <CourseCard key={course.id} course={course} />
-                ))}
+                {isLoading ? (
+                    <>
+                        <CourseCardSkeleton />
+                        <CourseCardSkeleton />
+                        <CourseCardSkeleton />
+                    </>
+                ) : courses.length === 0 ? (
+                    <div className="col-span-3 text-center py-12 text-gray-500">
+                        No courses available
+                    </div>
+                ) : (
+                    courses.slice(0, 3).map((course) => (
+                        <CourseCard
+                            key={course.id}
+                            course={{
+                                id: course.id,
+                                title: course.title,
+                                description: course.description || "",
+                                image:
+                                    course.thumbnail_url ||
+                                    "/images/img-courses.png",
+                                instructor: {
+                                    name: course.instructor?.name || "Unknown",
+                                    avatar:
+                                        course.instructor?.avatar_url ||
+                                        "/api/placeholder/40/40",
+                                },
+                            }}
+                        />
+                    ))
+                )}
             </div>
         </div>
     );
 };
 
 export const ExploreCourseSection = () => {
+    const [freeCourses, setFreeCourses] = useState<Course[]>([]);
+    const [popularCourses, setPopularCourses] = useState<Course[]>([]);
+    const [isLoadingFree, setIsLoadingFree] = useState(true);
+    const [isLoadingPopular, setIsLoadingPopular] = useState(true);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            const [free, popular] = await Promise.all([
+                getFreeCourses(3),
+                getPopularCourses(3),
+            ]);
+
+            setFreeCourses(free);
+            setPopularCourses(popular);
+            setIsLoadingFree(false);
+            setIsLoadingPopular(false);
+        };
+
+        fetchCourses();
+    }, []);
+
     const handleSeeAllFree = () => {
-        console.log("Navigate to all free courses");
+        window.location.href = "/courses?filter=free";
     };
+
     const handleSeeAllPopular = () => {
-        console.log("Navigate to all popular courses");
+        window.location.href = "/courses";
     };
+
     return (
         <section className="w-full custom-container py-16">
             <div className="text-center mb-12 sm:mb-16">
@@ -160,11 +118,13 @@ export const ExploreCourseSection = () => {
             <CourseSection
                 title="Free Courses"
                 courses={freeCourses}
+                isLoading={isLoadingFree}
                 onSeeAll={handleSeeAllFree}
             />
             <CourseSection
                 title="Popular Courses"
                 courses={popularCourses}
+                isLoading={isLoadingPopular}
                 onSeeAll={handleSeeAllPopular}
             />
         </section>
