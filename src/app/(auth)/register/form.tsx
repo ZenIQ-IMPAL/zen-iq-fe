@@ -34,8 +34,8 @@ export function RegisterForm() {
                     {state.error}
                 </div>
             )}
-            {state?.data && (
-                <div className="text-center text-green-600 text-sm">{`Hello ${state.data.email}`}</div>
+            {state?.success && (
+                <div className="text-center text-green-600 text-sm">Registration successful!</div>
             )}
 
             <div className="space-y-4">
