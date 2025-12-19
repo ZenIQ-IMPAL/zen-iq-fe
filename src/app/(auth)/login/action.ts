@@ -1,4 +1,5 @@
 import { consola } from "consola";
+import { API_BASE_URL, setCookie } from "@/lib/api/config";
 
 export interface LoginState {
     error?: string;
@@ -23,7 +24,7 @@ export const loginAction = async (
     }
 
     try {
-        const res = await fetch("http://localhost:3000/api/auth/login", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -34,6 +35,13 @@ export const loginAction = async (
 
         if (res.ok) {
             consola.info("Login Success");
+
+            // Store token in both cookie and localStorage
+            if (result.data?.token) {
+                setCookie("token", result.data.token, 7); // Save to cookie for 7 days
+                localStorage.setItem("token", result.data.token); // Fallback for cross-origin
+            }
+
             return { success: true };
         }
 
