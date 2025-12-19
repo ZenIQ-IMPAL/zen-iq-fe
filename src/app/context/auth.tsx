@@ -14,6 +14,7 @@ interface User {
   id: string;
   email: string;
   full_name: string;
+  is_premium: boolean;
 }
 
 interface AuthContextType {
@@ -42,7 +43,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       const { data } = await res.json();
-      setUser(data.user);
+      const userResponse = data.user;
+
+      setUser({
+        id: userResponse.id || "",
+        email: userResponse.email,
+        full_name: userResponse.fullName || userResponse.full_name,
+        is_premium: userResponse.isPremium || userResponse.is_premium || false,
+      });
     } catch (err) {
       setUser(null);
     } finally {

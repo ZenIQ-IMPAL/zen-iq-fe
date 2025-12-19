@@ -9,6 +9,7 @@ interface Course {
     name: string;
     avatar: string;
   };
+  is_free?: boolean;
 }
 
 interface CourseGridSectionProps {
