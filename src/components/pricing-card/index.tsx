@@ -16,15 +16,6 @@ interface PricingCardProps {
 }
 
 export const PricingCard = ({ plan }: PricingCardProps) => {
-    const getPlanParam = (durationMonths: number) => {
-        const monthMap: Record<number, string> = {
-            1: "monthly",
-            6: "6months",
-            12: "12months",
-        };
-        return monthMap[durationMonths] || "6months";
-    };
-
     const formatRupiah = (price: number): string => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -34,7 +25,6 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
         }).format(price);
     };
 
-    const planParam = getPlanParam(plan.durationMonths);
     const period =
         plan.durationMonths === 1 ? "/month" : `/${plan.durationMonths} months`;
 
@@ -65,7 +55,7 @@ export const PricingCard = ({ plan }: PricingCardProps) => {
                             </div>
                         ))}
                     </div>
-                    <Link href={`/payment?plan=${planParam}`}>
+                    <Link href={`/payment?plan=${plan.id}`}>
                         <Button
                             variant="outline"
                             className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-5 text-base"

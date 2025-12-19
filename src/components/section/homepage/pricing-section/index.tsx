@@ -6,8 +6,10 @@ import {
     getSubscriptionPlans,
     type SubscriptionPlan,
 } from "@/lib/api/subscription-plans";
+import { useAuth } from "@/app/context/auth";
 
 export const PricingSection = () => {
+    const { user } = useAuth();
     const [plans, setPlans] = useState<
         Array<{
             id: string;
@@ -18,6 +20,8 @@ export const PricingSection = () => {
         }>
     >([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    const isPremiumUser = user?.is_premium || false;
 
     useEffect(() => {
         const fetchPlans = async () => {
@@ -51,7 +55,9 @@ export const PricingSection = () => {
         }
     };
 
-    return (
+    const shouldHideSection = isPremiumUser;
+
+    return shouldHideSection ? null : (
         <section className="w-full custom-container py-16" id="pricing">
             <div className="text-center mb-12 sm:mb-16">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">

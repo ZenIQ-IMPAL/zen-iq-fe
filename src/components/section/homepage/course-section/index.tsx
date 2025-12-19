@@ -65,6 +65,7 @@ const CourseSection = ({
                                         course.instructor?.avatar_url ||
                                         "/api/placeholder/40/40",
                                 },
+                                is_free: course.is_free,
                             }}
                         />
                     ))

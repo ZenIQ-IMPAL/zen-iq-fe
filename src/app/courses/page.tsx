@@ -22,6 +22,7 @@ interface Course {
     instructor: Instructor;
     rating?: number;
     created_at?: string;
+    is_free?: boolean;
 }
 
 export default function CourseGrid() {
@@ -71,6 +72,7 @@ export default function CourseGrid() {
                     },
                     rating: Math.floor(Math.random() * 5) + 1,
                     created_at: course.created_at,
+                    is_free: course.is_free,
                 }));
 
                 if (filter === "New Courses") {
