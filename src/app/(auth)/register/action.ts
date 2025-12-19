@@ -1,4 +1,5 @@
 import { consola } from "consola";
+import { API_BASE_URL } from "@/lib/api/config";
 
 export interface RegisterState {
     error?: string;
@@ -25,7 +26,7 @@ export const registerAction = async (
     }
 
     try {
-        const res = await fetch("http://localhost:3000/api/auth/register", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -44,7 +45,10 @@ export const registerAction = async (
         const hasFieldErrors = result.errors && Array.isArray(result.errors);
         const fieldErrors: RegisterState["fieldErrors"] = hasFieldErrors
             ? result.errors.reduce(
-                  (acc: NonNullable<RegisterState["fieldErrors"]>, err: any) => {
+                  (
+                      acc: NonNullable<RegisterState["fieldErrors"]>,
+                      err: any,
+                  ) => {
                       if (err.field) {
                           acc[err.field as keyof typeof acc] = err.message;
                       }

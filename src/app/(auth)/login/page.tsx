@@ -12,9 +12,11 @@ import { loginSchema, LoginFormData } from "../../../lib/validation";
 import Image from "next/image";
 import { loginAction, LoginState } from "./action";
 import { toast } from "sonner";
+import { useAuth } from "@/app/context/auth";
 
 export default function LoginPage() {
     const router = useRouter();
+    const { fetchUser } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [loginState, setLoginState] = useState<LoginState>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +41,7 @@ export default function LoginPage() {
 
         if (result.success) {
             toast.success("Login successful!");
+            fetchUser(); // Refresh user data after successful login
             setTimeout(() => router.push("/"), 1500);
             setIsSubmitting(false);
             return;

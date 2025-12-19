@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_BASE_URL } from "./config";
 
 export interface Testimonial {
     id: number;
@@ -30,7 +30,7 @@ export interface TestimonialsResponse {
 export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
     try {
         const res = await fetch(
-            `${API_URL}/api/testimonials?is_featured=true&limit=10`,
+            `${API_BASE_URL}/api/testimonials?is_featured=true&limit=10`,
             {
                 next: { revalidate: 3600 },
             },

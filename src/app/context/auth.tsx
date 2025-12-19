@@ -8,6 +8,7 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { API_BASE_URL, getAuthHeaders } from "@/lib/api/config";
 
 interface User {
   id: string;
@@ -29,8 +30,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/auth/me", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
         method: "GET",
+        headers: getAuthHeaders(),
         credentials: "include",
       });
 

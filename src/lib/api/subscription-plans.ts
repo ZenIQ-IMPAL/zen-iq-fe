@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+import { API_BASE_URL } from "./config";
 
 export interface SubscriptionPlan {
     id: string;
@@ -18,7 +18,7 @@ export interface SubscriptionPlansResponse {
 
 export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
     try {
-        const res = await fetch(`${API_URL}/api/subscription-plans`, {
+        const res = await fetch(`${API_BASE_URL}/api/subscription-plans`, {
             next: { revalidate: 3600 },
             credentials: "include",
         });
