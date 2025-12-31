@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import { HeaderSection } from "@/components/section/course-detail/header-section";
 import { VideoSection } from "@/components/section/course-detail/video-section/";
 import { LessonsList } from "@/components/section/course-detail/lesson-list";
-import { API_BASE_URL } from "@/lib/api/config";
+import { API_BASE_URL, getAuthHeaders } from "@/lib/api/config";
 import { useAuth } from "@/app/context/auth";
 import { EnrollmentGate } from "@/components/section/course-detail/enrollment-gate";
 
@@ -148,7 +148,8 @@ export default function CourseDetail() {
       setLoading(true);
       try {
         const res = await fetch(`${API_BASE_URL}/api/courses/${courseId}`, {
-          credentials: "include",
+          headers: getAuthHeaders(),
+          credentials: "include" as RequestCredentials,
         });
         const json = await res.json();
         setCourse(json?.data || null);
@@ -167,7 +168,8 @@ export default function CourseDetail() {
     const checkEnrollment = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/api/enrollments/me`, {
-          credentials: "include",
+          headers: getAuthHeaders(),
+          credentials: "include" as RequestCredentials,
         });
         const json = await res.json();
         const enrolled = json?.data?.some((e: any) => e.course_id === courseId);

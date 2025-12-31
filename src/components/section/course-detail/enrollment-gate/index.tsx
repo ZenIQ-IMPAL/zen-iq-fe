@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { API_BASE_URL } from "@/lib/api/config";
+import { API_BASE_URL, getAuthHeaders } from "@/lib/api/config";
 import { useAuth } from "@/app/context/auth";
 
 interface EnrollmentGateProps {
@@ -24,8 +24,8 @@ export function EnrollmentGate({ courseId, onEnrolled }: EnrollmentGateProps) {
     // Create enrollment
     const res = await fetch(`${API_BASE_URL}/api/enrollments`, {
       method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
+      credentials: "include" as RequestCredentials,
       body: JSON.stringify({ course_id: courseId }),
     });
 

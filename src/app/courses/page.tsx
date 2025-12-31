@@ -50,7 +50,7 @@ export default function CourseGrid() {
                     url = `${API_BASE_URL}/api/recommendations`;
                 }
 
-                const res = await fetch(url, { credentials: "include" });
+                const res = await fetch(url);
                 if (!res.ok)
                     throw new Error(`HTTP error! Status: ${res.status}`);
 
