@@ -1,14 +1,47 @@
 "use client";
+import { API_BASE_URL, getAuthHeaders } from "@/lib/api/config";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const courses = Array(8).fill({
-  id: 1,
-  title: "AWS Certified Solutions Architect",
-  image: "/images/img-courses.png",
-});
+interface Course {
+  id: string;
+  title: string;
+  image: string;
+}
 
 export default function MyCoursePage() {
   const router = useRouter();
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  useEffect(() => {
+    async function fetchEnrollments() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/enrollments/me`, {
+          method: "GET",
+          headers: getAuthHeaders(),
+          credentials: "include" as RequestCredentials,
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch enrollments");
+        }
+
+        const data = await res.json();
+
+        const mappedCourses: Course[] = data.data.map((item: any) => ({
+          id: item.course_id,
+          title: item.title,
+          image: item.image,
+        }));
+
+        setCourses(mappedCourses);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchEnrollments();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white rounded-tl-3xl overflow-hidden">
@@ -25,9 +58,9 @@ export default function MyCoursePage() {
       {/* Course Cards */}
       <div className="px-8 pb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-          {courses.map((course, i) => (
+          {courses.map((course) => (
             <div
-              key={i}
+              key={course.id}
               className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col"
             >
               <img
