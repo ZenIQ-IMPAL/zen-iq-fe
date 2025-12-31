@@ -15,13 +15,11 @@ export function EnrollmentGate({ courseId, onEnrolled }: EnrollmentGateProps) {
   const pathname = usePathname();
 
   const handleEnroll = async () => {
-    // Force login
     if (!user) {
       router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
       return;
     }
 
-    // Create enrollment
     const res = await fetch(`${API_BASE_URL}/api/enrollments`, {
       method: "POST",
       headers: getAuthHeaders(),
@@ -31,7 +29,7 @@ export function EnrollmentGate({ courseId, onEnrolled }: EnrollmentGateProps) {
 
     if (res.ok) {
       onEnrolled();
-      router.refresh(); // revalidate
+      router.refresh();
     }
   };
 
@@ -46,7 +44,7 @@ export function EnrollmentGate({ courseId, onEnrolled }: EnrollmentGateProps) {
           onClick={handleEnroll}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          Enroll Now
+          {user ? "Enroll Now" : "Login to Enroll"}
         </button>
       </div>
     </div>

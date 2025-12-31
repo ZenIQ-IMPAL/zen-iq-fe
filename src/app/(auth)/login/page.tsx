@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "../../../lib/validation";
 import Image from "next/image";
@@ -17,6 +17,7 @@ import { useAuth } from "@/app/context/auth";
 export default function LoginPage() {
     const router = useRouter();
     const { fetchUser } = useAuth();
+    const searchParams = useSearchParams();
     const [showPassword, setShowPassword] = useState(false);
     const [loginState, setLoginState] = useState<LoginState>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,11 +40,14 @@ export default function LoginPage() {
         const result = await loginAction(loginState, formData);
         setLoginState(result);
 
+        const redirect = searchParams.get("redirect") || "/";
+
         if (result.success) {
             toast.success("Login successful!");
             fetchUser(); // Refresh user data after successful login
-            setTimeout(() => router.push("/"), 1500);
+            setTimeout(() =>  router.push(redirect), 1500);
             setIsSubmitting(false);
+
             return;
         }
 
