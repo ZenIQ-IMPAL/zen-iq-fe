@@ -19,9 +19,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     { name: "Learning Progress", href: "/dashboard/learning-progress" },
   ];
 
-  const handleLogout = () => {
-    router.push("/");
-  };
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  document.cookie = "token=; Max-Age=0; path=/";
+  window.location.href = "/";
+};
+
 
   return (
     <div className="flex min-h-screen">
