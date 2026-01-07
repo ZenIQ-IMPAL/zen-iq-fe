@@ -10,6 +10,8 @@ interface Lesson {
     description: string[];
     videoUrl: string;
     moduleId: string;
+    contentId: string;
+    isChecked: boolean;
 }
 
 interface ModuleGroup {
@@ -23,23 +25,18 @@ interface LessonsListProps {
     modules: ModuleGroup[];
     selectedLessonId: number;
     onLessonClick: (lessonId: number) => void;
+    onToggleLesson: (lesson: Lesson, checked: boolean) => void;
 }
 
 export function LessonsList({
     modules,
     selectedLessonId,
     onLessonClick,
+    onToggleLesson,
 }: LessonsListProps) {
-    const [completedLessons, setCompletedLessons] = useState<number[]>([]);
     const [expandedModules, setExpandedModules] = useState<string[]>(
         modules.map((m) => m.id)
     );
-
-    const toggleLesson = (id: number) => {
-        setCompletedLessons((prev) =>
-            prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id]
-        );
-    };
 
     const toggleModule = (moduleId: string) => {
         setExpandedModules((prev) =>
@@ -53,7 +50,6 @@ export function LessonsList({
 
     const renderLesson = (lesson: Lesson) => {
         const isSelected = selectedLessonId === lesson.id;
-        const isCompleted = completedLessons.includes(lesson.id);
 
         const containerClasses = [
             "flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-gray-50",
@@ -68,8 +64,8 @@ export function LessonsList({
             >
                 <Checkbox
                     id={`lesson-${lesson.id}`}
-                    checked={isCompleted}
-                    onCheckedChange={() => toggleLesson(lesson.id)}
+                    checked={lesson.isChecked}
+                    onCheckedChange={(checked) => onToggleLesson(lesson, checked as boolean)}
                     onClick={(e) => e.stopPropagation()}
                     className="mt-1 flex-shrink-0"
                 />
@@ -131,16 +127,13 @@ export function LessonsList({
         );
     };
 
-    const hasModules = modules && modules.length > 0;
-
-    return hasModules ? (
+    return modules.length > 0 ? (
         <div className="w-full max-w-[387px] rounded-md border border-[#F5F5F5] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.05)] bg-white overflow-hidden">
             <div className="bg-white px-4 py-3 border-b border-[#F5F5F5]">
                 <h2 className="text-xl font-semibold text-gray-900">
                     Course Content
                 </h2>
             </div>
-
             <div className="divide-y divide-[#F5F5F5]">
                 {modules.map(renderModule)}
             </div>

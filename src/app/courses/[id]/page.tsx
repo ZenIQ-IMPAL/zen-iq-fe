@@ -18,6 +18,7 @@ interface Content {
   content_description: string;
   video_url: string;
   order_sequence: number;
+  is_checked: boolean;
 }
 interface Module {
   id: string;
@@ -54,7 +55,10 @@ interface Lesson {
   description: string[];
   videoUrl: string;
   moduleId: string;
+  contentId: string;
+  isChecked: boolean;
 }
+
 interface ModuleGroup {
   id: string;
   name: string;
@@ -63,22 +67,8 @@ interface ModuleGroup {
 }
 
 // --- UTILS ---
-const sortBySequence = <T extends { order_sequence: number }>(
-  items: T[]
-): T[] => [...items].sort((a, b) => a.order_sequence - b.order_sequence);
-
-const flattenModulesToLessons = (modules: Module[]): Lesson[] => {
-  let lessonId = 1;
-  return sortBySequence(modules).flatMap((module) =>
-    sortBySequence(module.content).map((content) => ({
-      id: lessonId++,
-      title: content.content_title,
-      description: [content.content_description],
-      videoUrl: content.video_url,
-      moduleId: module.id,
-    }))
-  );
-};
+const sortBySequence = <T extends { order_sequence: number }>(items: T[]): T[] =>
+  [...items].sort((a, b) => a.order_sequence - b.order_sequence);
 
 const transformModulesToGroups = (modules: Module[]): ModuleGroup[] => {
   let lessonId = 1;
@@ -92,6 +82,8 @@ const transformModulesToGroups = (modules: Module[]): ModuleGroup[] => {
       description: [content.content_description],
       videoUrl: content.video_url,
       moduleId: module.id,
+      contentId: content.id,
+      isChecked: content.is_checked,
     })),
   }));
 };
@@ -107,13 +99,39 @@ const NotFoundState = () => (
 // --- COURSE CONTENT ---
 function CourseContent({ course }: { course: Course }) {
   const moduleGroups = transformModulesToGroups(course.modules);
-  const flatLessons = flattenModulesToLessons(course.modules);
-  const [selectedLessonId, setSelectedLessonId] = useState<number>(
-    flatLessons[0]?.id || 1
-  );
+  const [modulesState, setModulesState] = useState<ModuleGroup[]>(moduleGroups);
+
+  const flatLessons = modulesState.flatMap((m) => m.lessons);
+  const [selectedLessonId, setSelectedLessonId] = useState<number>(flatLessons[0]?.id || 1);
+
   const selectedLesson = flatLessons.find((l) => l.id === selectedLessonId);
-  const currentVideoUrl =
-    selectedLesson?.videoUrl || flatLessons[0]?.videoUrl || "";
+  const currentVideoUrl = selectedLesson?.videoUrl || flatLessons[0]?.videoUrl || "";
+
+  const handleToggleLesson = async (lesson: Lesson, checked: boolean) => {
+    // Optimistic UI
+    setModulesState((prev) =>
+      prev.map((module) => ({
+        ...module,
+        lessons: module.lessons.map((l) =>
+          l.id === lesson.id ? { ...l, isChecked: checked } : l
+        ),
+      }))
+    );
+
+    try {
+      await fetch(`${API_BASE_URL}/api/course-content/${lesson.contentId}/check`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({ isChecked: checked }),
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Failed to update lesson:", err);
+    }
+  };
 
   return (
     <>
@@ -122,9 +140,10 @@ function CourseContent({ course }: { course: Course }) {
         <VideoSection videoUrl={currentVideoUrl} />
         <div className="w-full lg:w-1/3">
           <LessonsList
-            modules={moduleGroups}
+            modules={modulesState}
             selectedLessonId={selectedLessonId}
             onLessonClick={setSelectedLessonId}
+            onToggleLesson={handleToggleLesson}
           />
         </div>
       </div>
