@@ -76,7 +76,7 @@ export default function MyCoursePage() {
                   onClick={() => router.push(`/courses/${course.id}`)}
                   className="mt-4 bg-[var(--primary)] text-white px-4 py-2 rounded-lg text-sm hover:opacity-90"
                 >
-                  Start Learning
+                  Continue Learning
                 </button>
               </div>
             </div>
