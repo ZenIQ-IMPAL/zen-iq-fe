@@ -40,7 +40,7 @@ export default function RegisterPage() {
 
         if (result.success) {
             toast.success("Registration successful!");
-            setTimeout(() => router.push("/login"), 1500);
+            setTimeout(() => router.push("/"), 1500);
             setIsSubmitting(false);
             return;
         }
